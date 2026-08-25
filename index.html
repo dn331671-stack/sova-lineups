@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sova Lineups</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">◈ SOVA LINEUPS</div>
+  <div class="search-wrap"><input id="searchInput" type="search" placeholder="Tìm lineup, map, danh mục..."></div>
+  <button id="loginBtn" class="admin-btn">🔐 Admin</button>
+</header>
+<div id="setupNotice" class="setup-notice hidden">Chưa cấu hình Publishable key. Mở <b>config.js</b> và dán key Supabase của bạn.</div>
+<div class="layout">
+  <aside class="sidebar">
+    <button class="nav active" onclick="goHome()">⌂ &nbsp; Trang chủ</button>
+    <div class="side-title">MAPS</div>
+    <div id="mapNav"></div>
+  </aside>
+  <main class="main">
+    <section id="homeView"><div class="page-title">CHỌN MAP</div><div id="mapGrid" class="map-grid"></div></section>
+    <section id="mapView" class="hidden"><button class="back" onclick="goHome()">← Quay lại</button><div id="mapHeading"></div><div class="choice-grid"><button class="choice" onclick="chooseSide('Phòng thủ')"><span>🛡</span><b>PHÒNG THỦ</b><small>Chống rush, scan, anti spike...</small></button><button class="choice" onclick="chooseSide('Tấn công')"><span>⚔</span><b>TẤN CÔNG</b><small>Recon, clear site, post plant...</small></button></div></section>
+    <section id="categoryView" class="hidden"><button class="back" onclick="openMap(currentMap)">← Quay lại</button><div id="categoryHeading"></div><div id="categoryGrid" class="category-grid"></div></section>
+    <section id="lineupView" class="hidden"><button class="back" onclick="chooseSide(currentSide)">← Quay lại</button><div id="lineupHeading"></div><div class="filters"><input id="categorySearch" type="search" placeholder="Tìm trong danh mục này..."></div><div id="lineupList" class="lineup-list"></div></section>
+    <section id="adminView" class="hidden">
+      <div class="admin-head"><div><h1>QUẢN LÝ LINEUP</h1><p id="adminUser" class="muted"></p></div><button id="logoutBtn" class="secondary">Đăng xuất</button></div>
+      <form id="lineupForm" class="admin-form">
+        <input id="editId" type="hidden">
+        <label>Map<select id="formMap"></select></label>
+        <label>Phân loại<select id="formSide"><option>Phòng thủ</option><option>Tấn công</option></select></label>
+        <label>Danh mục<select id="formCategory"></select></label>
+        <label>Tên lineup<input id="formTitle" required placeholder="Ví dụ: A Main Recon"></label>
+        <label>Link video<input id="formVideo" required type="url" placeholder="https://youtube.com/..."></label>
+        <label>Mô tả<textarea id="formDescription" placeholder="Mô tả ngắn về lineup"></textarea></label>
+        <div class="form-actions"><button class="primary" type="submit" id="saveBtn">＋ THÊM LINEUP</button><button class="secondary hidden" type="button" id="cancelEdit">Hủy sửa</button></div>
+      </form>
+      <h2 class="admin-list-title">Lineup đã lưu</h2><div id="adminList" class="admin-list"></div>
+    </section>
+  </main>
+</div>
+<div id="authModal" class="modal hidden"><div class="modal-card"><button class="modal-close" onclick="closeLogin()">×</button><h2>Đăng nhập Admin</h2><p class="muted">Chỉ tài khoản Admin đã tạo trong Supabase mới có thể quản lý.</p><form id="loginForm"><label>Email<input id="loginEmail" type="email" required autocomplete="email"></label><label>Mật khẩu<input id="loginPassword" type="password" required autocomplete="current-password"></label><button class="primary" type="submit">ĐĂNG NHẬP</button><p id="loginError" class="error"></p></form></div></div>
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
