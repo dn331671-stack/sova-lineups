@@ -1,4 +1,18 @@
-const MAPS = ['Ascent','Bind','Haven','Icebox','Lotus','Pearl','Split','Fracture','Sunset'];
+const MAPS = [
+  'Ascent',
+  'Bind',
+  'Haven',
+  'Icebox',
+  'Lotus',
+  'Pearl',
+  'Split',
+  'Fracture',
+  'Sunset',
+  'Breeze',
+  'Abyss',
+  'Summit',
+  'Corrode'
+];
 const CATEGORIES = {
   'Phòng thủ': [['Chống Rush','Phát hiện địch rush sớm'],['Scan','Quét vị trí và kiểm soát khu vực'],['Anti Spike','Ngăn hoặc trì hoãn việc đặt spike'],['Khác','Các lineup phòng thủ khác']],
   'Tấn công': [['Recon','Scan site và khu vực cần chiếm'],['Clear Site','Hỗ trợ dọn site'],['Anti Defuse','Gây áp lực khi đối thủ defuse'],['Khác','Các lineup tấn công khác']]
