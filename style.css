@@ -16,7 +16,7 @@ button,input,select,textarea{font:inherit}
 .map-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
 .map-card{min-height:145px;background:linear-gradient(145deg,#1b2026,#111419);border:1px solid var(--border);border-radius:14px;color:white;cursor:pointer;display:flex;flex-direction:column;justify-content:end;padding:20px;text-align:left;transition:.18s}
 .map-card:hover{transform:translateY(-3px);border-color:#69727c;background:#20262d}.map-card b{font-size:25px}.map-card small{color:var(--muted);margin-top:6px}
-.hidden{display:none}
+.hidden{display:none!important}
 .back{font-size:15px;margin-bottom:22px;color:#aeb6bf}.back:hover{color:white}
 #mapHeading h1,#categoryHeading h1,#lineupHeading h1{font-size:34px;margin:0 0 30px}
 .choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:850px}
