@@ -37,7 +37,9 @@ async function renderLineups(){
   const {data,error}=await query;
   if(error){$('lineupList').innerHTML=`<div class="lineup"><div><h3>Lỗi tải lineup</h3><p>${escapeHtml(error.message)}</p></div></div>`;return;}
   const list=(data||[]).filter(x=>(`${x.title||''} ${x.description||''}`).toLowerCase().includes(q));
-  $('lineupList').innerHTML=list.length?list.map(x=>`<article class="lineup"><div><h3>${escapeHtml(x.title)}</h3><p>${escapeHtml(x.description||'Lineup Sova')}</p></div><a class="video" href="${safeUrl(x.video_url)}" target="_blank" rel="noopener">▶ XEM VIDEO</a></article>`).join(''):`<div class="lineup"><div><h3>Chưa có lineup</h3><p>Admin chưa thêm lineup ở mục này.</p></div></div>`;
+  $('lineupList').innerHTML=list.length?list.map(x=>`<article class="lineup"><div><h3>${escapeHtml(x.title)}</h3><p>${escapeHtml(x.description||'Lineup Sova')}</p></div><button class="video" onclick="openVideo('${safeUrl(x.video_url)}')">
+  ▶ XEM VIDEO
+</button></article>`).join(''):`<div class="lineup"><div><h3>Chưa có lineup</h3><p>Admin chưa thêm lineup ở mục này.</p></div></div>`;
 }
 function populateForm(){ $('formMap').innerHTML=MAPS.map(m=>`<option>${m}</option>`).join(''); updateCategoryOptions(); }
 $('formSide').addEventListener('change',updateCategoryOptions);
@@ -68,3 +70,53 @@ supabaseInit();
 async function supabaseInit(){if(SUPABASE_PUBLISHABLE_KEY==='PASTE_YOUR_PUBLISHABLE_KEY_HERE'){ $('setupNotice').classList.remove('hidden'); renderMaps(); return;} supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);const {data:{session}}=await supabaseClient.auth.getSession();if(session)$('loginBtn').textContent='⚙ Admin';supabaseClient.auth.onAuthStateChange((_event,s)=>{$('loginBtn').textContent=s?'⚙ Admin':'🔐 Admin';});renderMaps();}
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function safeUrl(url){try{const u=new URL(url);return ['http:','https:'].includes(u.protocol)?u.href:'#';}catch{return '#';}}
+function openVideo(url){
+  const embed = youtubeEmbed(url);
+
+  if(!embed){
+    window.open(url, '_blank');
+    return;
+  }
+
+  const modal = document.createElement('div');
+  modal.className = 'video-modal';
+  modal.innerHTML = `
+    <div class="video-box">
+      <button class="video-close" onclick="this.closest('.video-modal').remove()">✕</button>
+      <iframe
+        src="${embed}"
+        title="Sova Lineup Video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
+function youtubeEmbed(url){
+  try{
+    const u = new URL(url);
+
+    if(u.hostname.includes('youtu.be')){
+      return `https://www.youtube.com/embed/${u.pathname.slice(1)}`;
+    }
+
+    if(u.hostname.includes('youtube.com')){
+      const id = u.searchParams.get('v');
+
+      if(id){
+        return `https://www.youtube.com/embed/${id}`;
+      }
+
+      if(u.pathname.startsWith('/shorts/')){
+        return `https://www.youtube.com/embed/${u.pathname.split('/')[2]}`;
+      }
+    }
+
+    return null;
+  }catch{
+    return null;
+  }
+}
